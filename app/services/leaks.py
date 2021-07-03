@@ -32,9 +32,10 @@ class LeakService(object):
     def __init__(
             self,
             leak_repo: LeakRepository = Depends(LeakRepository),
-            whitelist_repo: WhiteListRepository = Depends(LeakRepository),
+            whitelist_repo: WhiteListRepository = Depends(WhiteListRepository),
     ):
         self.leak_repo = leak_repo
+        self.whitelist_repo = whitelist_repo
 
     def add(self, leak: LeakInfo) -> Leak:
         return self.leak_repo.add(leak)

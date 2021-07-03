@@ -98,17 +98,10 @@ class LeakRepository(Repository):
                   per: int = 10,
                   page: int = 1) -> Tuple:
         per_page, pages = self.get_offset(per, page)
+        querys = [Leak.ignore == 0, Leak.is_white == 0, Leak.is_process == 0]
         if kind:
-            querys = [
-                Leak.kind == kind,
-                Leak.ignore == 0,
-                Leak.is_white == 0,
-                Leak.is_process == 0,
-            ]
-        else:
-            querys = [
-                Leak.ignore == 0, Leak.is_white == 0, Leak.is_process == 0
-            ]
+            querys.append(Leak.kind == kind)
+
         count = self.db.query(Leak).filter(*querys).count()
         data = (self.db.query(Leak).filter(*querys).order_by(
             Leak.id.desc()).offset(pages).limit(per_page).all())

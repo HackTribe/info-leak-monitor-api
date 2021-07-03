@@ -18,6 +18,7 @@
 #
 from typing import Tuple
 from fastapi import Depends
+from fastapi.param_functions import Query
 from app.repositories.leaks import LeakRepository
 from app.repositories.whitelist import WhiteListRepository
 from app.schemas.leaks import QueryLeak, SearchLeak, LeakInfo, LeakState
@@ -55,6 +56,8 @@ class LeakService(object):
             page = 1
         else:
             page = query.pages
+        if query.kind == "all":
+            query.kind = ""
         return self.leak_repo.get_leaks(query.kind, per, page)
 
     def get_all_export(self, kind: str) -> Tuple:

@@ -62,7 +62,7 @@ class SearchLeak(BaseModel):
     kind: Optional[str]
     field: str
     keyword: str
-    status: int
+    state_type: int
     pages: Optional[int] = 1
     per_pages: Optional[int] = 10
 

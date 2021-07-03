@@ -66,7 +66,9 @@ def get_leaks(
     return data
 
 
-@router.patch("/leaks")
+@router.patch("/leaks",
+              description="state_type value: 0 ignore, 1 white list, 2 process"
+              )
 def process_leaks(leak_state: LeakState,
                   leak_service: LeakService = Depends(LeakService)):
 

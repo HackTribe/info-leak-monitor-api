@@ -63,7 +63,7 @@ class LeakRepository(Repository):
             page = 1
         per_page, pages = self.get_offset(per, page)
 
-        querys = [Leak.ignore == 0, Leak.is_white == 0]
+        querys = []
         if query.kind:
             if query.kind.lower() != "all":
                 querys.append(Leak.kind == query.kind.lower())
@@ -79,6 +79,12 @@ class LeakRepository(Repository):
                     func.instr(query.keyword, Leak.repo_name),
                     func.instr(query.keyword, Leak.repo_url),
                 ))
+        if query.state_type == 0:
+            querys.append(Leak.ignore != 0)
+        elif query.state_type == 1:
+            querys.append(Leak.is_white != 0)
+        elif query.state_type == 2:
+            querys.append(Leak.is_process != 0)
         count = self.db.query(Leak).filter(*querys).count()
         data = (self.db.query(Leak).filter(*querys).order_by(
             Leak.id.desc()).offset(pages).limit(per_page).all())
@@ -90,15 +96,19 @@ class LeakRepository(Repository):
                   page: int = 1) -> Tuple:
         per_page, pages = self.get_offset(per, page)
         if kind:
-            querys = [Leak.kind == kind, Leak.ignore == 0, Leak.is_white == 0]
-            count = self.db.query(Leak).filter(*querys).count()
-            data = (self.db.query(Leak).filter(*querys).order_by(
-                Leak.id.desc()).offset(pages).limit(per_page).all())
+            querys = [
+                Leak.kind == kind,
+                Leak.ignore == 0,
+                Leak.is_white == 0,
+                Leak.is_process == 0,
+            ]
         else:
-            querys = [Leak.ignore == 0, Leak.is_white == 0]
-            count = self.db.query(Leak).filter(*querys).count()
-            data = (self.db.query(Leak).filter(*querys).order_by(
-                Leak.id.desc()).offset(pages).limit(per_page).all())
+            querys = [
+                Leak.ignore == 0, Leak.is_white == 0, Leak.is_process == 0
+            ]
+        count = self.db.query(Leak).filter(*querys).count()
+        data = (self.db.query(Leak).filter(*querys).order_by(
+            Leak.id.desc()).offset(pages).limit(per_page).all())
         return (count, data)
 
     def get_all_export(self, kind: str) -> Tuple:

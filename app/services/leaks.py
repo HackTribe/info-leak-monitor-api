@@ -19,14 +19,21 @@
 from typing import Tuple
 from fastapi import Depends
 from app.repositories.leaks import LeakRepository
+from app.repositories.whitelist import WhiteListRepository
 from app.schemas.leaks import QueryLeak, SearchLeak, LeakInfo, LeakState
 from app.models.leaks import Leak
+from app.schemas.tasks import WhiteListInfo
 
 
 class LeakService(object):
     leak_repo: LeakRepository
+    whitelist_repo: WhiteListRepository
 
-    def __init__(self, leak_repo: LeakRepository = Depends(LeakRepository)):
+    def __init__(
+            self,
+            leak_repo: LeakRepository = Depends(LeakRepository),
+            whitelist_repo: WhiteListRepository = Depends(LeakRepository),
+    ):
         self.leak_repo = leak_repo
 
     def add(self, leak: LeakInfo) -> Leak:
@@ -56,6 +63,15 @@ class LeakService(object):
         if leak_state.state_type == 0:
             self.leak_repo.set_ignore(leak_state.id)
         elif leak_state.state_type == 1:
+            leak = self.leak_repo.get_leak_by_id(leak_state.id)
+            if leak:
+                whitelist = WhiteListInfo(
+                    kind=leak.kind,
+                    sha=leak.sha,
+                    url_path=leak.repo_url,
+                    url_path_last_time=leak.last_modified,
+                )
+                self.whitelist_repo.add_whitelist(whitelist)
             self.leak_repo.set_whitelist(leak_state.id)
         else:
             self.leak_repo.set_process(leak_state.id)

@@ -12,7 +12,7 @@ from sqlalchemy.ext.declarative import as_declarative, declared_attr
 
 @as_declarative()
 class Base:
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    id = Column(BigInteger, primary_key=True, index=True, autoincrement=True)
     create_time = Column(BigInteger, default=time.time)
     update_time = Column(
         BigInteger,

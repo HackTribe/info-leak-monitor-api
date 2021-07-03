@@ -52,6 +52,9 @@ class LeakRepository(Repository):
     def get_leak_by_sha(self, sha: str) -> Leak:
         return self.db.query(Leak).filter(Leak.sha == sha).first()
 
+    def get_leak_by_id(self, id: int) -> Leak:
+        return self.db.query(Leak).filter(Leak.id == id).first()
+
     def search_leaks(self, query: SearchLeak) -> Tuple:
         if query.per_pages:
             per = query.per_pages

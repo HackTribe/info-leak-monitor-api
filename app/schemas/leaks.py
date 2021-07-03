@@ -37,10 +37,9 @@ class LeakInfo(BaseModel):
     user_name: Optional[str]
     user_url: Optional[str]
     leak_count: Optional[int]
-    watching: Optional[bool]
-    follow: Optional[bool]
     ignore: Optional[bool]
     is_white: Optional[bool]
+    is_process: Optional[bool]
 
     class Config:
         orm_mode = True
@@ -63,7 +62,7 @@ class SearchLeak(BaseModel):
     kind: Optional[str]
     field: str
     keyword: str
-    status: bool
+    status: int
     pages: Optional[int] = 1
     per_pages: Optional[int] = 10
 

@@ -66,18 +66,19 @@ def get_leaks(
     return data
 
 
-@router.patch("/leaks/{id}")
-def process_leaks(id: int, leak_service: LeakService = Depends(LeakService)):
+@router.patch("/leaks")
+def process_leaks(leak_state: LeakState,
+                  leak_service: LeakService = Depends(LeakService)):
 
-    return leak_service.process(LeakState(id=id, state_type=1))
+    return leak_service.process(leak_state)
 
 
-@router.get("/leaks/{kind}")
-def export_csv_file(kind: str,
+@router.post("/leaks/export")
+def export_csv_file(query: SearchLeak,
                     leak_service: LeakService = Depends(LeakService)):
     export_csv = f"./download/{time.time()}.csv"
 
-    _, result = leak_service.get_all_export(kind)
+    _, result = leak_service.search_leaks(query)
 
     with open(export_csv, "w", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile, delimiter=",")
@@ -96,8 +97,7 @@ def export_csv_file(kind: str,
             "user_name",
             "user_url",
             "leak_count",
-            "watching",
-            "follow",
+            "is_process",
             "ignore",
             "is_white",
         ])
@@ -121,8 +121,7 @@ def export_csv_file(kind: str,
                 data.user_name.encode("utf-8"),
                 data.user_url.encode("utf-8"),
                 data.leak_count,
-                data.watching,
-                data.follow,
+                data.is_process,
                 data.ignore,
                 data.is_white,
             ])

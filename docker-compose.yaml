@@ -1,0 +1,27 @@
+version: "3.5"
+services:
+  web:
+    build: .
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/app/
+    environment:
+      TZ: Asia/Shanghai
+    links:
+      - database
+    depends_on:
+      - database
+    command: ["bash", "scripts/start.sh"]
+  database:
+    image: mariadb:latest
+    restart: always
+    command: --max_allowed_packet=1073741824 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    expose:
+      - 3306
+    volumes:
+      - ./data/mysql/:/var/lib/mysql/
+    environment:
+      MYSQL_ROOT_PASSWORD: <mysql password>
+      MYSQL_DATABASE: info-leak-monitor

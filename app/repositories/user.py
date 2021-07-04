@@ -3,7 +3,7 @@
 #
 # Author: hacktribe <hacktribe.org>
 #
-
+from typing import Optional
 from app.core.security import get_password_hash, verify_password
 from app.models.user import User
 from app.schemas.user import UserRegister
@@ -22,14 +22,14 @@ class UserRepository(Repository):
         self.db.commit()
         return user
 
-    def authenticate(self, username: str, password: str) -> User:
+    def authenticate(self, username: str, password: str) -> Optional[User]:
         user = self.get_by_username(username)
 
         if not user:
-            return False
+            return None
 
         if not verify_password(password, user.password):
-            return False
+            return None
 
         return user
 
@@ -38,3 +38,9 @@ class UserRepository(Repository):
 
     def get_by_email(self, email: str) -> User:
         return self.db.query(User).filter(User.email == email).first()
+
+    def update_password(self, username: str, new_password: str):
+        user = self.get_by_username(username)
+        if user:
+            user.password = get_password_hash(new_password)
+            self.db.commit()

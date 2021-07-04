@@ -56,9 +56,9 @@ def remove_whitelist(
 @router.get("/whitelists/{kind}", response_model=List[ResponseWhiteListInfo])
 def get_whitelist(
         kind: str,
-        per: int,
-        page: int,
         response: Response,
+        per: int = 10,
+        page: int = 1,
         whitelist_service: WhiteListService = Depends(WhiteListService),
 ):
     total, data = whitelist_service.get_whitelist_by_kind(kind, per, page)
@@ -71,9 +71,9 @@ def get_whitelist(
 
 @router.get("/whitelists", response_model=List[ResponseWhiteListInfo])
 def get_whitelist_all(
-        per: int,
-        page: int,
         response: Response,
+        per: int = 10,
+        page: int = 1,
         whitelist_service: WhiteListService = Depends(WhiteListService),
 ):
     total, data = whitelist_service.get_whitelists(per, page)

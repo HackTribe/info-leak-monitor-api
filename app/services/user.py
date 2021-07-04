@@ -4,6 +4,7 @@
 # Author: hacktribe <hacktribe.org>
 #
 
+from typing import Optional
 from app.schemas.user import UserRegister
 from app.repositories.user import UserRepository
 from app.models.user import User
@@ -27,7 +28,11 @@ class UserService(object):
             detail="{} Not Found.".format(username),
         )
 
-    def authenticate(self, username: str, password: str) -> User:
+    def update_password(self, username: str,
+                        new_password: str) -> Optional[User]:
+        return self.user_repo.update_password(username, new_password)
+
+    def authenticate(self, username: str, password: str) -> Optional[User]:
         return self.user_repo.authenticate(username, password)
 
     def create(self, user_register: UserRegister) -> User:

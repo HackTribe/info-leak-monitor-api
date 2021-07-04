@@ -52,9 +52,9 @@ def search(
 @router.get("/leaks/lists/{kind}", response_model=List[LeakInfo])
 def get_leaks(
         kind: str,
-        per: int,
-        page: int,
         response: Response,
+        per: int = 10,
+        page: int = 1,
         leak_service: LeakService = Depends(LeakService),
 ):
     query = QueryLeak(kind=kind, per_pages=per, pages=page)

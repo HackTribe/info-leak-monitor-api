@@ -61,7 +61,7 @@ class TaskService(object):
             if hasattr(props, "excludes"):
                 excludes = props.excludes
             results.append(
-                TaskInfo(
+                ResponseTaskInfo(
                     id=job.id,
                     name=job.name,
                     kind=props.kind,

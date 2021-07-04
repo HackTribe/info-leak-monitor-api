@@ -71,7 +71,11 @@ async def modify_password(user: ModifyUserPassword,
         "sub": loginUser.username,
         "scopes": ["api"]
     })
-    return {"access_token": access_token, "token_type": "Bearer"}
+    return {
+        "username": loginUser.username,
+        "access_token": access_token,
+        "token_type": "Bearer"
+    }
 
 
 @router.post("/login", response_model=Token)
@@ -95,7 +99,11 @@ async def login_for_access_token(
         "sub": user.username,
         "scopes": ["api"]
     })
-    return {"access_token": access_token, "token_type": "Bearer"}
+    return {
+        "username": user.username,
+        "access_token": access_token,
+        "token_type": "Bearer"
+    }
 
 
 @router.post("/settings/tokens", response_model=Token)

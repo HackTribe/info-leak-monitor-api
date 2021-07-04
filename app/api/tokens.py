@@ -16,8 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+import math
 from starlette.status import HTTP_403_FORBIDDEN
-import json
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Response, Security
 from app.services.tokens import TokenService
@@ -32,11 +32,17 @@ router = APIRouter(
 def get_tokens(response: Response,
                token_service: TokenService = Depends(TokenService)):
     total, data = token_service.get_access_tokens()
-
+    new_data = []
+    for d in data:
+        d.access_token = d.access_token[0:math.floor(
+            len(d.access_token) / 2 /
+            2)] + "******" + d.access_token[math.floor(-len(d.access_token) /
+                                                       2 / 2):]
+        new_data.append(d)
     response.headers.update({
         "X-Total-Count": str(total),
     })
-    return data
+    return new_data
 
 
 @router.get("/git-access-tokens/{kind}",
@@ -45,10 +51,18 @@ def get_token_by_kind(kind: str,
                       response: Response,
                       token_service: TokenService = Depends(TokenService)):
     total, data = token_service.get_access_tokens_by_kind(kind)
+    new_data = []
+    for d in data:
+        d.access_token = d.access_token[0:math.floor(
+            len(d.access_token) / 2 /
+            2)] + "******" + d.access_token[math.floor(-len(d.access_token) /
+                                                       2 / 2):]
+        new_data.append(d)
     response.headers.update({
         "X-Total-Count": str(total),
     })
-    return data
+
+    return new_data
 
 
 @router.post("/git-access-token", response_model=ResponseTokenInfo)

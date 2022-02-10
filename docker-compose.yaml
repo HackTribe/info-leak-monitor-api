@@ -1,0 +1,36 @@
+version: "3.5"
+services:
+  info-leak-monitor-web:
+    image: 7ym0n/info-leak-monitor-web:latest
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      TZ: Asia/Shanghai
+    links:
+      - info-leak-monitor-api
+    depends_on:
+      - info-leak-monitor-api
+  info-leak-monitor-api:
+    image: 7ym0n/info-leak-monitor-api:latest
+    restart: always
+    expose:
+      - 80
+    environment:
+      TZ: Asia/Shanghai
+    links:
+      - info-leak-monitor-database
+    depends_on:
+      - info-leak-monitor-database
+    command: ["bash", "scripts/start.sh"]
+  info-leak-monitor-database:
+    image: mariadb:latest
+    restart: always
+    command: --max_allowed_packet=1073741824 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    expose:
+      - 3306
+    volumes:
+      - ./data/mysql/:/var/lib/mysql/
+    environment:
+      MYSQL_ROOT_PASSWORD: meiyoumima
+      MYSQL_DATABASE: info-leak-monitor

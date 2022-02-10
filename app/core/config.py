@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     allowed_hosts: List[str] = ["*"]
     api_prefix: str = "/api"
 
-    version: str = "0.0.0"
+    version: str = "0.1.0"
     debug: bool = True
 
     twepoch: int = 0  # id worker start time
@@ -35,7 +35,8 @@ class Settings(BaseSettings):
 
     database_username: str = "root"
     database_password: str = ""
-    database_host: Union[str, AnyHttpUrl, IPvAnyAddress] = "database"
+    database_host: Union[str, AnyHttpUrl,
+                         IPvAnyAddress] = "info-leak-monitor-database"
     database_port: int = 3306
     database_name: str = "info-leak-monitor"
     database_echo: bool = True

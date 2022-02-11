@@ -29,6 +29,13 @@ docker exec -it info-leak-monitor-api /bin/bash
 #> alembic revision --autogenerate -m "init" && alembic upgrade head
 ```
 
+## Admin
+use `init-db.sql` file initialization database.
+- user `admin`
+- password `meiyoumima`
+
+if you use alembic tools initialization database. need using `API` add users. see API docs (http://127.0.0.1/api/docs).
+
 ## Dependencies
 - Docker
 - Docker Compose

@@ -21,7 +21,7 @@ docker-compose -f docker-compose.yaml up -d
 ```
 import database table structure.
 ```
-mysqlimport -h 127.0.0.1 -u root -p info-leak-monitor init-db.sql
+mysql -u root -p info-leak-monitor < init-db.sql
 ```
 or use alembic tools initialization database.
 ```

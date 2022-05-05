@@ -153,6 +153,7 @@ class TaskService(object):
             self.scheduler.modify_job(
                 job.id,
                 name=job.name,
+                func=callback,
                 trigger=temp_trigger,
                 next_run_time=next_run_time,
                 args=(job, ),

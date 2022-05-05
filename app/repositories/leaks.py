@@ -26,6 +26,7 @@ from sqlalchemy import func, or_
 
 
 class LeakRepository(Repository):
+
     def add(self, leak: LeakInfo) -> Leak:
         leakinfo = Leak(
             kind=leak.kind,

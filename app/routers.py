@@ -5,7 +5,7 @@
 #
 
 from app.api import home, tasks, tokens, leaks, whitelist
-from fastapi import APIRouter
+from fastapi.routing import APIRouter
 
 router = APIRouter()
 router.include_router(home.router, tags=["home"])

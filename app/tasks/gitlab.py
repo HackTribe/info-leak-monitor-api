@@ -95,6 +95,8 @@ def searching(job: TaskInfo, gl: gitlab.Gitlab, page: int):
     # all=True
     repos = gl.projects.list(all=False, simple=False, page=page)
     for repo in repos:
+        if job.keywords is not None:
+            continue
         for keyword in job.keywords:
             # 去掉html标记与换行符
             new_keyword = (re.sub(r"</?\w+[^>]*>", "",

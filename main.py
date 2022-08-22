@@ -9,7 +9,7 @@ from app.core.events import create_start_app_handler, create_stop_app_handler
 from app.core.http_error import http_error_handler
 from app.routers import router as api_router
 from app.core.validation_error import http422_error_handler
-from fastapi import FastAPI
+from fastapi.applications import FastAPI
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException
 from starlette.middleware.cors import CORSMiddleware
